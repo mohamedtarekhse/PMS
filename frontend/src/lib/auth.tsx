@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import api from './api';
 
 interface User {
   id: number;
@@ -24,70 +23,40 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-function loadUser(): User | null {
-  try {
-    const stored = localStorage.getItem('pms_user');
-    return stored ? JSON.parse(stored) : null;
-  } catch {
-    return null;
-  }
-}
+const MOCK_USER: User = {
+  id: 1,
+  email: 'mohamedtarekhse@gmail.com',
+  username: 'manager',
+  full_name: 'Mohamed Tarek',
+  role: 'manager',
+  preferred_lang: 'en',
+};
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('pms_token'));
-  const [user, setUser] = useState<User | null>(() => loadUser());
+  const [token, setToken] = useState<string | null>('mock-token');
+  const [user, setUser] = useState<User | null>(MOCK_USER);
 
   useEffect(() => {
     if (user?.preferred_lang) {
-      localStorage.setItem('pms_lang', user.preferred_lang);
       const dir = user.preferred_lang === 'ar' ? 'rtl' : 'ltr';
       document.documentElement.dir = dir;
       document.documentElement.lang = user.preferred_lang;
     }
   }, [user]);
 
-  const isAuthenticated = !!token && !!user;
+  const isAuthenticated = true;
   const isTechnician = user?.role === 'technician';
   const isCoordinator = user?.role === 'coordinator';
   const isManager = user?.role === 'manager';
 
-  const login = useCallback(async (email: string, password: string) => {
-    const data = await api.post<{ token: string; user: User }>('/auth/login', { email, password });
-    localStorage.setItem('pms_token', data.token);
-    localStorage.setItem('pms_user', JSON.stringify(data.user));
-    if (data.user.preferred_lang) {
-      localStorage.setItem('pms_lang', data.user.preferred_lang);
-    }
-    setToken(data.token);
-    setUser(data.user);
-  }, []);
+  const login = useCallback(async () => {}, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('pms_token');
-    localStorage.removeItem('pms_user');
     setToken(null);
     setUser(null);
   }, []);
 
-  const register = useCallback(async (
-    inviteToken: string,
-    username: string,
-    password: string,
-    fullName: string,
-    preferredLang: string
-  ) => {
-    const data = await api.post<{ token: string; user: User }>('/auth/register', {
-      token: inviteToken,
-      username,
-      password,
-      full_name: fullName,
-      preferred_lang: preferredLang,
-    });
-    localStorage.setItem('pms_token', data.token);
-    localStorage.setItem('pms_user', JSON.stringify(data.user));
-    setToken(data.token);
-    setUser(data.user);
-  }, []);
+  const register = useCallback(async () => {}, []);
 
   return (
     <AuthContext.Provider value={{

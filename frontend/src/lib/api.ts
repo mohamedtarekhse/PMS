@@ -1,43 +1,26 @@
-const API_BASE = import.meta.env.PROD
-  ? (import.meta.env.VITE_API_URL || '/api')
-  : '/api';
+const MOCK_DATA: Record<string, any> = {
+  '/equipment': [],
+  '/dashboard/stats': { total_equipment: 0, due_this_week: 0, overdue: 0, issues_found: 0 },
+  '/alerts': [],
+  '/alerts/count': { count: 0 },
+  '/frequencies': [],
+  '/pm/schedule': [],
+  '/pm/summary': [],
+};
 
-async function request<T>(
-  method: string,
-  path: string,
-  body?: unknown,
-  params?: Record<string, string>
-): Promise<T> {
-  const token = localStorage.getItem('pms_token');
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+function matchMock(path: string): any {
+  const exact = MOCK_DATA[path];
+  if (exact !== undefined) return exact;
+  for (const key of Object.keys(MOCK_DATA)) {
+    if (path.startsWith(key) && path.length > key.length) return MOCK_DATA[key];
   }
+  return null;
+}
 
-  let url = `${API_BASE}${path}`;
-  if (params) {
-    const searchParams = new URLSearchParams(params);
-    url += `?${searchParams.toString()}`;
-  }
-
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined,
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(error.message || `HTTP ${response.status}`);
-  }
-
-  if (response.status === 204) {
-    return undefined as T;
-  }
-
-  return response.json();
+async function request<T>(method: string, path: string, body?: unknown, params?: Record<string, string>): Promise<T> {
+  const mock = matchMock(path);
+  const data = mock !== null ? mock : method === 'GET' ? [] : { success: true };
+  return Promise.resolve(data as T);
 }
 
 const api = {
