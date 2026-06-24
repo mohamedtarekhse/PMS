@@ -1,0 +1,12 @@
+{
+  "name": "pms-rig8",
+  "private": true,
+  "scripts": {
+    "dev:worker": "cd worker && wrangler dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "deploy:worker": "cd worker && wrangler deploy",
+    "deploy:frontend": "cd frontend && npm run build && wrangler pages deploy dist --project-name pms-rig8",
+    "db:migrate": "cd worker && wrangler d1 migrations apply PMS_DB",
+    "db:seed": "python ../seed/import_templates.py && cd worker && wrangler d1 execute PMS_DB --file=../seed/seed_data.sql"
+  }
+}
