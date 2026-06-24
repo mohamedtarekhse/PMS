@@ -5,7 +5,7 @@ compatibility_date = "2026-06-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "pms-rig8-db"
-database_id = ""
+database_id = "6d85f0ba-e950-4f0b-b9f9-ee420b3b7da5"
 
 [env.production]
 vars = { JWT_SECRET = "", RESEND_API_KEY = "", MANAGER_EMAIL = "mohamedtarekhse@gmail.com", APP_URL = "https://pm.rig8.com" }
