@@ -2,7 +2,7 @@
   "name": "pms-rig8",
   "private": true,
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm install && npm run build && rm -rf ../dist && mv dist ../dist",
     "dev:worker": "cd worker && wrangler dev",
     "dev:frontend": "cd frontend && npm run dev",
     "deploy:worker": "cd worker && wrangler deploy",
