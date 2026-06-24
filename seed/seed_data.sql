@@ -220,4 +220,4 @@ INSERT OR IGNORE INTO equipment_schedules (equipment_id, frequency_id, is_active
 -- Seed Admin / Manager User
 -- ---------------------------------------------------
 INSERT OR IGNORE INTO users (id, username, email, password_hash, role, full_name, preferred_lang)
-VALUES (1, 'manager', 'mohamedtarekhse@gmail.com', '$2a$10$initialhashplaceholder', 'manager', 'Mohamed Tarek', 'en');
+VALUES (1, 'manager', 'mohamedtarekhse@gmail.com', '$2a$10$bQUHJ4ux3BX1CSmdGBz/quXOtSqbXqTH6OoJJNfNJpn51Tv/LYWx.', 'manager', 'Mohamed Tarek', 'en');
