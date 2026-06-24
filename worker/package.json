@@ -18,6 +18,6 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "typescript": "^5.4.0",
-    "wrangler": "^3.60.0"
+    "wrangler": "^4.0.0"
   }
 }
